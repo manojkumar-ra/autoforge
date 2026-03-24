@@ -1,0 +1,101 @@
+customer_id,age,gender,monthly_charges,total_charges,tenure_months,contract_type,internet_service,num_support_tickets,payment_method,churn
+1001,25,Male,45.50,546.00,12,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1002,34,Female,70.25,2529.00,36,One Year,Fiber Optic,1,Bank Transfer,No
+1003,45,Male,29.99,1079.64,36,Two Year,DSL,0,Credit Card,No
+1004,22,Female,89.90,449.50,5,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1005,56,Male,55.00,3960.00,72,Two Year,DSL,1,Bank Transfer,No
+1006,31,Female,75.50,1510.00,20,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1007,28,Male,35.00,1260.00,36,One Year,DSL,0,Bank Transfer,No
+1008,42,Female,95.00,2850.00,30,Month-to-Month,Fiber Optic,6,Credit Card,Yes
+1009,38,Male,50.00,3600.00,72,Two Year,DSL,0,Bank Transfer,No
+1010,29,Female,82.00,984.00,12,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1011,52,Male,40.00,2880.00,72,Two Year,DSL,1,Bank Transfer,No
+1012,24,Female,78.50,392.50,5,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1013,47,Male,60.00,4320.00,72,Two Year,Fiber Optic,0,Bank Transfer,No
+1014,33,Female,45.00,1620.00,36,One Year,DSL,2,Credit Card,No
+1015,26,Male,92.00,1104.00,12,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1016,61,Female,30.00,2160.00,72,Two Year,DSL,0,Bank Transfer,No
+1017,35,Male,85.00,1700.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1018,44,Female,55.50,3996.00,72,Two Year,DSL,1,Bank Transfer,No
+1019,27,Male,72.00,864.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1020,39,Female,48.00,3456.00,72,Two Year,DSL,0,Bank Transfer,No
+1021,30,Male,88.00,1320.00,15,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1022,55,Female,42.00,3024.00,72,Two Year,DSL,1,Bank Transfer,No
+1023,23,Male,76.00,380.00,5,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1024,48,Female,38.00,2736.00,72,Two Year,DSL,0,Bank Transfer,No
+1025,32,Male,65.00,2340.00,36,One Year,Fiber Optic,2,Credit Card,No
+1026,41,Female,90.00,1800.00,20,Month-to-Month,Fiber Optic,6,Credit Card,Yes
+1027,36,Male,52.00,3744.00,72,Two Year,DSL,0,Bank Transfer,No
+1028,29,Female,79.00,948.00,12,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1029,58,Male,33.00,2376.00,72,Two Year,DSL,1,Bank Transfer,No
+1030,25,Female,87.00,1044.00,12,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1031,43,Male,46.00,3312.00,72,Two Year,DSL,0,Bank Transfer,No
+1032,37,Female,71.00,2556.00,36,One Year,Fiber Optic,2,Credit Card,No
+1033,21,Male,93.00,465.00,5,Month-to-Month,Fiber Optic,6,Credit Card,Yes
+1034,50,Female,39.00,2808.00,72,Two Year,DSL,1,Bank Transfer,No
+1035,34,Male,68.00,1360.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1036,46,Female,44.00,3168.00,72,Two Year,DSL,0,Bank Transfer,No
+1037,28,Male,81.00,972.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1038,53,Female,36.00,2592.00,72,Two Year,DSL,1,Bank Transfer,No
+1039,31,Male,74.00,1480.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1040,40,Female,58.00,4176.00,72,Two Year,Fiber Optic,0,Bank Transfer,No
+1041,26,Male,86.00,1032.00,12,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1042,49,Female,41.00,2952.00,72,Two Year,DSL,0,Bank Transfer,No
+1043,33,Male,77.00,924.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1044,57,Female,32.00,2304.00,72,Two Year,DSL,1,Bank Transfer,No
+1045,24,Male,91.00,455.00,5,Month-to-Month,Fiber Optic,6,Credit Card,Yes
+1046,44,Female,53.00,3816.00,72,Two Year,DSL,0,Bank Transfer,No
+1047,35,Male,83.00,1660.00,20,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1048,51,Female,37.00,2664.00,72,Two Year,DSL,1,Bank Transfer,No
+1049,27,Male,69.00,2484.00,36,One Year,Fiber Optic,2,Credit Card,No
+1050,38,Female,94.00,1880.00,20,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1051,62,Male,31.00,2232.00,72,Two Year,DSL,0,Bank Transfer,No
+1052,30,Female,80.00,960.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1053,45,Male,47.00,3384.00,72,Two Year,DSL,0,Bank Transfer,No
+1054,23,Female,88.50,442.50,5,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1055,54,Male,43.00,3096.00,72,Two Year,DSL,1,Bank Transfer,No
+1056,36,Female,73.00,2628.00,36,One Year,Fiber Optic,2,Credit Card,No
+1057,29,Male,84.00,1680.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1058,47,Female,49.00,3528.00,72,Two Year,DSL,0,Bank Transfer,No
+1059,32,Male,76.50,918.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1060,59,Female,34.00,2448.00,72,Two Year,DSL,1,Bank Transfer,No
+1061,25,Male,89.00,445.00,5,Month-to-Month,Fiber Optic,6,Credit Card,Yes
+1062,41,Female,56.00,4032.00,72,Two Year,Fiber Optic,0,Bank Transfer,No
+1063,34,Male,67.00,2412.00,36,One Year,Fiber Optic,2,Credit Card,No
+1064,28,Female,82.50,990.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1065,52,Male,38.00,2736.00,72,Two Year,DSL,1,Bank Transfer,No
+1066,37,Female,75.00,1500.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1067,43,Male,51.00,3672.00,72,Two Year,DSL,0,Bank Transfer,No
+1068,22,Female,90.50,452.50,5,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1069,48,Male,40.50,2916.00,72,Two Year,DSL,1,Bank Transfer,No
+1070,33,Female,72.00,1440.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1071,56,Male,35.50,2556.00,72,Two Year,DSL,0,Bank Transfer,No
+1072,26,Female,85.50,1026.00,12,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1073,39,Male,57.00,4104.00,72,Two Year,Fiber Optic,0,Bank Transfer,No
+1074,31,Female,78.00,936.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1075,50,Male,42.50,3060.00,72,Two Year,DSL,1,Bank Transfer,No
+1076,35,Female,66.00,2376.00,36,One Year,Fiber Optic,2,Credit Card,No
+1077,24,Male,87.50,437.50,5,Month-to-Month,Fiber Optic,6,Credit Card,Yes
+1078,46,Female,48.50,3492.00,72,Two Year,DSL,0,Bank Transfer,No
+1079,30,Male,81.50,978.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1080,55,Female,36.50,2628.00,72,Two Year,DSL,1,Bank Transfer,No
+1081,38,Male,74.50,1490.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1082,42,Female,54.00,3888.00,72,Two Year,DSL,0,Bank Transfer,No
+1083,27,Male,83.50,1002.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1084,60,Female,33.50,2412.00,72,Two Year,DSL,1,Bank Transfer,No
+1085,32,Male,70.00,2520.00,36,One Year,Fiber Optic,2,Credit Card,No
+1086,23,Female,92.50,462.50,5,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1087,49,Male,44.50,3204.00,72,Two Year,DSL,0,Bank Transfer,No
+1088,36,Female,77.50,1550.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1089,53,Male,39.50,2844.00,72,Two Year,DSL,1,Bank Transfer,No
+1090,25,Female,86.50,1038.00,12,Month-to-Month,Fiber Optic,5,Credit Card,Yes
+1091,44,Male,50.50,3636.00,72,Two Year,DSL,0,Bank Transfer,No
+1092,29,Female,79.50,954.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1093,57,Male,34.50,2484.00,72,Two Year,DSL,1,Bank Transfer,No
+1094,34,Female,71.50,2574.00,36,One Year,Fiber Optic,2,Credit Card,No
+1095,21,Male,94.50,472.50,5,Month-to-Month,Fiber Optic,6,Credit Card,Yes
+1096,51,Female,41.50,2988.00,72,Two Year,DSL,0,Bank Transfer,No
+1097,37,Male,73.50,1470.00,20,Month-to-Month,Fiber Optic,3,Credit Card,Yes
+1098,40,Female,59.00,4248.00,72,Two Year,Fiber Optic,0,Bank Transfer,No
+1099,28,Male,80.50,966.00,12,Month-to-Month,Fiber Optic,4,Credit Card,Yes
+1100,54,Female,37.50,2700.00,72,Two Year,DSL,1,Bank Transfer,No

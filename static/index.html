@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoForge - Auto ML Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-dim: rgba(139, 92, 246, 0.12);
+            --bg: #09090b;
+            --surface: #111114;
+            --surface2: #18181b;
+            --border: #27272a;
+            --text: #d4d4d8;
+            --text-dim: #71717a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --blue: #3b82f6;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0.8rem 2rem;
+            background: rgba(9, 9, 11, 0.95);
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+        .logo { display: flex; align-items: center; gap: 0.6rem; }
+        .logo-icon {
+            width: 34px; height: 34px; border-radius: 10px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; color: white; font-weight: 700;
+        }
+        .logo-name { font-size: 1.2rem; font-weight: 700; color: #fafafa; }
+        .logo-name span { color: var(--primary); }
+        .logo-sub { font-size: 0.62rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1.5px; }
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+        .nav-links a { color: var(--text-dim); font-size: 0.82rem; text-decoration: none; cursor: pointer; font-weight: 500; }
+        .nav-links a:hover { color: var(--primary); }
+
+        .hero {
+            text-align: center; padding: 3.5rem 2rem 2rem;
+            position: relative;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
+            width: 500px; height: 300px;
+            background: radial-gradient(ellipse, rgba(139, 92, 246, 0.06) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .hero h1 { font-size: 2.5rem; font-weight: 700; color: #fafafa; margin-bottom: 0.6rem; }
+        .hero h1 .gr {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa, #c4b5fd);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { color: var(--text-dim); font-size: 0.95rem; max-width: 500px; margin: 0 auto; line-height: 1.6; }
+
+        .steps-bar {
+            display: flex; justify-content: center; gap: 0.3rem; margin-top: 1.5rem;
+        }
+        .step-pill {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem; padding: 0.3rem 0.8rem;
+            border-radius: 20px; border: 1px solid var(--border);
+            background: var(--surface); color: var(--text-dim);
+        }
+        .step-pill.active { border-color: var(--primary); color: var(--primary); background: var(--primary-dim); }
+
+        .main-wrapper { max-width: 900px; margin: 1.5rem auto; padding: 0 1.5rem; }
+
+        /* upload area */
+        .upload-section { margin-bottom: 2rem; }
+        .upload-zone {
+            background: var(--surface); border: 2px dashed var(--border);
+            border-radius: 14px; padding: 2.5rem; text-align: center;
+            cursor: pointer; transition: all 0.3s;
+        }
+        .upload-zone:hover { border-color: var(--primary); }
+        .upload-zone.dragging { border-color: var(--primary); background: var(--primary-dim); }
+        .upload-zone .icon { font-size: 2rem; margin-bottom: 0.6rem; }
+        .upload-zone .text { color: var(--text-dim); font-size: 0.9rem; }
+        .upload-zone .hint { color: #3f3f46; font-size: 0.75rem; margin-top: 0.3rem; font-family: 'JetBrains Mono', monospace; }
+
+        /* sections */
+        .section { display: none; margin-bottom: 2rem; }
+        .section.show { display: block; }
+        .section-header {
+            display: flex; align-items: center; gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .section-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem; color: var(--primary);
+            text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .section-line { height: 1px; flex: 1; background: var(--border); }
+
+        /* data preview table */
+        .table-wrap {
+            overflow-x: auto; border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        table {
+            width: 100%; border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        th {
+            background: var(--surface2); color: var(--primary);
+            padding: 0.6rem 0.8rem; text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem; font-weight: 500;
+            border-bottom: 1px solid var(--border);
+        }
+        td {
+            padding: 0.5rem 0.8rem; border-bottom: 1px solid #1a1a1e;
+            color: var(--text);
+        }
+        tr:hover td { background: rgba(139, 92, 246, 0.03); }
+
+        /* column cards */
+        .col-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 0.8rem; }
+        .col-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; padding: 0.9rem;
+        }
+        .col-card-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem; color: #fafafa; margin-bottom: 0.4rem;
+            display: flex; justify-content: space-between;
+        }
+        .col-type {
+            font-size: 0.65rem; padding: 0.15rem 0.5rem;
+            border-radius: 10px; font-weight: 500;
+        }
+        .col-type.numeric { background: rgba(59, 130, 246, 0.1); color: var(--blue); }
+        .col-type.categorical { background: rgba(139, 92, 246, 0.1); color: var(--primary); }
+        .col-type.text { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .col-stat { font-size: 0.75rem; color: var(--text-dim); margin-top: 0.2rem; }
+        .col-stat span { color: var(--text); }
+
+        /* target selector */
+        .target-box {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.2rem;
+        }
+        .target-label { font-size: 0.85rem; color: var(--text); margin-bottom: 0.6rem; }
+        .target-select {
+            width: 100%; background: var(--surface2); border: 1px solid var(--border);
+            color: #fafafa; padding: 0.6rem 0.8rem; border-radius: 8px;
+            font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+            outline: none; cursor: pointer;
+        }
+        .target-select:focus { border-color: var(--primary); }
+        .task-badge {
+            display: inline-block; margin-top: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+        }
+        .task-badge.classification { background: rgba(139, 92, 246, 0.1); color: var(--primary); }
+        .task-badge.regression { background: rgba(59, 130, 246, 0.1); color: var(--blue); }
+
+        .train-btn {
+            background: var(--primary); color: white;
+            border: none; padding: 0.7rem 2.5rem; border-radius: 8px;
+            font-weight: 600; font-size: 0.9rem; cursor: pointer;
+            margin-top: 1rem; transition: all 0.2s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .train-btn:hover { background: #7c3aed; }
+        .train-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        /* loading */
+        .training-loader {
+            display: none; text-align: center; padding: 3rem;
+        }
+        .training-loader.show { display: block; }
+        .spinner {
+            width: 36px; height: 36px; border: 3px solid var(--border);
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin: 0 auto 1rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .training-loader p { color: var(--text-dim); font-size: 0.85rem; }
+
+        /* results */
+        .model-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; }
+        .model-card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; padding: 0.9rem;
+            transition: all 0.2s;
+        }
+        .model-card.best { border-color: var(--primary); background: var(--primary-dim); }
+        .model-name {
+            font-size: 0.82rem; font-weight: 600; color: #fafafa;
+            margin-bottom: 0.3rem;
+            display: flex; align-items: center; gap: 0.4rem;
+        }
+        .crown { color: var(--warning); font-size: 0.75rem; }
+        .model-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem; font-weight: 700; color: var(--primary);
+        }
+        .model-meta {
+            font-size: 0.72rem; color: var(--text-dim);
+            margin-top: 0.2rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* charts */
+        .chart-container {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.2rem;
+            margin-top: 1rem;
+        }
+        .chart-title {
+            font-size: 0.82rem; font-weight: 600; color: #fafafa;
+            margin-bottom: 0.8rem;
+        }
+        canvas { max-height: 300px; }
+
+        /* explanation */
+        .explanation-box {
+            background: var(--surface); border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px; padding: 1.3rem; margin-top: 1rem;
+        }
+        .explanation-title {
+            font-size: 0.82rem; font-weight: 600; color: var(--primary);
+            margin-bottom: 0.7rem; font-family: 'JetBrains Mono', monospace;
+        }
+        .explanation-text {
+            font-size: 0.88rem; color: var(--text); line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* history */
+        .history-area { margin-top: 2rem; padding-bottom: 3rem; }
+        .history-item {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 8px; padding: 0.8rem 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .history-top { display: flex; justify-content: space-between; align-items: center; }
+        .history-name { font-size: 0.85rem; color: #fafafa; }
+        .history-score {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem; color: var(--primary); font-weight: 600;
+        }
+        .history-meta {
+            font-size: 0.72rem; color: var(--text-dim); margin-top: 0.3rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .empty-msg { text-align: center; color: #3f3f46; font-size: 0.85rem; padding: 2rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .col-grid { grid-template-columns: 1fr; }
+            .model-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <div class="logo-icon">AF</div>
+        <div>
+            <div class="logo-name">Auto<span>Forge</span></div>
+            <div class="logo-sub">Auto ML Platform</div>
+        </div>
+    </div>
+    <ul class="nav-links">
+        <li><a onclick="goTo('.upload-section')">Upload</a></li>
+        <li><a onclick="goTo('.history-area')">History</a></li>
+    </ul>
+</nav>
+
+<section class="hero">
+    <h1>Upload Data. <span class="gr">Auto Train.</span></h1>
+    <p>Drop any CSV dataset and AutoForge will find the best ML model for it — automatically.</p>
+    <div class="steps-bar">
+        <span class="step-pill active" id="pill1">1. upload</span>
+        <span class="step-pill" id="pill2">2. analyze</span>
+        <span class="step-pill" id="pill3">3. train</span>
+        <span class="step-pill" id="pill4">4. results</span>
+    </div>
+</section>
+
+<div class="main-wrapper">
+
+    <!-- upload -->
+    <div class="upload-section">
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+            <div class="icon">+</div>
+            <div class="text">Drop your CSV file here or click to upload</div>
+            <div class="hint">supported: .csv files</div>
+            <input type="file" id="fileInput" hidden accept=".csv">
+        </div>
+    </div>
+
+    <!-- dataset analysis -->
+    <div class="section" id="analysisSection">
+        <div class="section-header">
+            <span class="section-title">dataset overview</span>
+            <div class="section-line"></div>
+        </div>
+        <div id="datasetStats"></div>
+        <div class="col-grid" id="columnsGrid" style="margin-top:1rem"></div>
+
+        <div style="margin-top:1rem">
+            <div class="section-header">
+                <span class="section-title">data preview</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="table-wrap" id="previewTable"></div>
+        </div>
+
+        <div style="margin-top:1.5rem">
+            <div class="section-header">
+                <span class="section-title">select target</span>
+                <div class="section-line"></div>
+            </div>
+            <div class="target-box">
+                <div class="target-label">Which column do you want to predict?</div>
+                <select class="target-select" id="targetSelect" onchange="onTargetChange()">
+                    <option value="">-- select target column --</option>
+                </select>
+                <div id="taskInfo"></div>
+                <button class="train-btn" id="trainBtn" onclick="startTraining()" disabled>Train Models</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- training loader -->
+    <div class="training-loader" id="trainingLoader">
+        <div class="spinner"></div>
+        <p>Training multiple models... this might take a minute.</p>
+    </div>
+
+    <!-- results -->
+    <div class="section" id="resultsSection">
+        <div class="section-header">
+            <span class="section-title">model comparison</span>
+            <div class="section-line"></div>
+        </div>
+        <div class="model-grid" id="modelGrid"></div>
+
+        <div class="chart-container" id="chartContainer" style="margin-top:1rem">
+            <div class="chart-title">Model Performance</div>
+            <canvas id="comparisonChart"></canvas>
+        </div>
+
+        <div class="chart-container" id="featureContainer" style="display:none">
+            <div class="chart-title">Feature Importance</div>
+            <canvas id="featureChart"></canvas>
+        </div>
+
+        <div class="explanation-box" id="explanationBox" style="display:none">
+            <div class="explanation-title">// ai explanation</div>
+            <div class="explanation-text" id="explanationText"></div>
+        </div>
+    </div>
+
+    <!-- history -->
+    <div class="history-area">
+        <div class="section-header">
+            <span class="section-title">training history</span>
+            <div class="section-line"></div>
+        </div>
+        <div id="historyList">
+            <div class="empty-msg">no training runs yet.</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const API = '';
+    let currentAnalysis = null;
+    let compChart = null;
+    let featChart = null;
+
+    function goTo(sel) { document.querySelector(sel).scrollIntoView({ behavior: 'smooth' }); }
+
+    function esc(t) {
+        const d = document.createElement('div');
+        d.textContent = t;
+        return d.innerHTML;
+    }
+
+    function setPill(n) {
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById('pill' + i).classList.toggle('active', i <= n);
+        }
+    }
+
+    // drag and drop
+    const zone = document.getElementById('uploadZone');
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragging'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+    zone.addEventListener('drop', e => {
+        e.preventDefault(); zone.classList.remove('dragging');
+        if (e.dataTransfer.files.length) uploadFile(e.dataTransfer.files[0]);
+    });
+    document.getElementById('fileInput').addEventListener('change', e => {
+        if (e.target.files.length) uploadFile(e.target.files[0]);
+    });
+
+    async function uploadFile(file) {
+        if (!file.name.endsWith('.csv')) { alert('Only CSV files!'); return; }
+
+        zone.innerHTML = '<div class="text">Uploading and analyzing...</div>';
+
+        try {
+            const form = new FormData();
+            form.append('file', file);
+            const res = await fetch(API + '/upload', { method: 'POST', body: form });
+            const data = await res.json();
+
+            if (!res.ok) { alert(data.detail || 'Upload failed'); zone.innerHTML = '<div class="text">Try again</div>'; return; }
+
+            currentAnalysis = data.analysis;
+            renderAnalysis(data.analysis, data.filename);
+            setPill(2);
+
+            zone.innerHTML = `<div class="text">${esc(file.name)} uploaded</div><div class="hint">click to upload a different file</div>`;
+
+        } catch(e) {
+            alert('Upload failed');
+            zone.innerHTML = '<div class="text">Try again</div>';
+        }
+    }
+
+    function renderAnalysis(analysis, filename) {
+        document.getElementById('analysisSection').classList.add('show');
+
+        // stats
+        document.getElementById('datasetStats').innerHTML = `
+            <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+                <div class="col-card" style="flex:1;min-width:120px;text-align:center">
+                    <div style="font-size:1.5rem;font-weight:700;color:var(--primary)">${analysis.total_rows}</div>
+                    <div style="font-size:0.75rem;color:var(--text-dim)">rows</div>
+                </div>
+                <div class="col-card" style="flex:1;min-width:120px;text-align:center">
+                    <div style="font-size:1.5rem;font-weight:700;color:var(--blue)">${analysis.total_columns}</div>
+                    <div style="font-size:0.75rem;color:var(--text-dim)">columns</div>
+                </div>
+                <div class="col-card" style="flex:1;min-width:120px;text-align:center">
+                    <div style="font-size:1.5rem;font-weight:700;color:var(--success)">${analysis.potential_targets.length}</div>
+                    <div style="font-size:0.75rem;color:var(--text-dim)">targets</div>
+                </div>
+            </div>
+        `;
+
+        // columns
+        const grid = document.getElementById('columnsGrid');
+        grid.innerHTML = '';
+        analysis.columns.forEach(col => {
+            const card = document.createElement('div');
+            card.className = 'col-card';
+            let statsHtml = '';
+            if (col.type === 'numeric' && col.stats.mean !== null) {
+                statsHtml = `<div class="col-stat">mean: <span>${col.stats.mean}</span> | min: <span>${col.stats.min}</span> | max: <span>${col.stats.max}</span></div>`;
+            } else if (col.stats.top_values) {
+                const top = Object.entries(col.stats.top_values).slice(0, 3).map(([k,v]) => `${k}(${v})`).join(', ');
+                statsHtml = `<div class="col-stat">${esc(top)}</div>`;
+            }
+            card.innerHTML = `
+                <div class="col-card-name">
+                    <span>${esc(col.name)}</span>
+                    <span class="col-type ${col.type}">${col.type}</span>
+                </div>
+                <div class="col-stat">missing: <span>${col.missing_pct}%</span> | unique: <span>${col.unique}</span></div>
+                ${statsHtml}
+            `;
+            grid.appendChild(card);
+        });
+
+        // preview table
+        if (analysis.sample_data && analysis.sample_data.length > 0) {
+            const cols = Object.keys(analysis.sample_data[0]);
+            let html = '<table><thead><tr>';
+            cols.forEach(c => html += `<th>${esc(c)}</th>`);
+            html += '</tr></thead><tbody>';
+            analysis.sample_data.forEach(row => {
+                html += '<tr>';
+                cols.forEach(c => html += `<td>${esc(String(row[c] || ''))}</td>`);
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+            document.getElementById('previewTable').innerHTML = html;
+        }
+
+        // target selector
+        const sel = document.getElementById('targetSelect');
+        sel.innerHTML = '<option value="">-- select target column --</option>';
+        analysis.potential_targets.forEach(t => {
+            sel.innerHTML += `<option value="${esc(t.name)}">${esc(t.name)} (${t.task}${t.classes ? ', ' + t.classes + ' classes' : ''})</option>`;
+        });
+        // also add all columns as options
+        analysis.columns.forEach(col => {
+            if (!analysis.potential_targets.find(t => t.name === col.name)) {
+                sel.innerHTML += `<option value="${esc(col.name)}">${esc(col.name)}</option>`;
+            }
+        });
+
+        document.getElementById('analysisSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function onTargetChange() {
+        const target = document.getElementById('targetSelect').value;
+        const info = document.getElementById('taskInfo');
+        const btn = document.getElementById('trainBtn');
+
+        if (!target) {
+            info.innerHTML = '';
+            btn.disabled = true;
+            return;
+        }
+
+        btn.disabled = false;
+
+        // check if its in potential targets
+        const pt = currentAnalysis.potential_targets.find(t => t.name === target);
+        if (pt) {
+            info.innerHTML = `<span class="task-badge ${pt.task}">${pt.task}${pt.classes ? ' (' + pt.classes + ' classes)' : ''}</span>`;
+        } else {
+            info.innerHTML = `<span class="task-badge regression">will auto-detect task type</span>`;
+        }
+    }
+
+    async function startTraining() {
+        const target = document.getElementById('targetSelect').value;
+        if (!target) return;
+
+        document.getElementById('trainBtn').disabled = true;
+        document.getElementById('trainingLoader').classList.add('show');
+        document.getElementById('resultsSection').classList.remove('show');
+        setPill(3);
+
+        try {
+            const res = await fetch(API + '/train', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target_column: target })
+            });
+
+            const data = await res.json();
+            document.getElementById('trainingLoader').classList.remove('show');
+
+            if (!res.ok) {
+                alert(data.detail || 'Training failed');
+                document.getElementById('trainBtn').disabled = false;
+                return;
+            }
+
+            renderResults(data);
+            setPill(4);
+            loadHistory();
+
+        } catch(e) {
+            document.getElementById('trainingLoader').classList.remove('show');
+            alert('Training failed: ' + e.message);
+        }
+
+        document.getElementById('trainBtn').disabled = false;
+    }
+
+    function renderResults(data) {
+        document.getElementById('resultsSection').classList.add('show');
+
+        const results = data.training.results;
+        const best = data.training.best_model;
+        const taskType = data.task_type;
+
+        // model cards
+        const grid = document.getElementById('modelGrid');
+        grid.innerHTML = '';
+        results.forEach(r => {
+            if (r.error) return;
+            const isBest = r.name === best;
+            const score = taskType === 'classification' ? r.accuracy : r.r2_score;
+            const card = document.createElement('div');
+            card.className = 'model-card' + (isBest ? ' best' : '');
+            card.innerHTML = `
+                <div class="model-name">${isBest ? '<span class="crown">*</span>' : ''} ${esc(r.name)}</div>
+                <div class="model-score">${score}%</div>
+                <div class="model-meta">${taskType === 'classification' ? 'f1: ' + r.f1_score + '%' : 'rmse: ' + r.rmse} | cv: ${r.cv_score}%</div>
+                <div class="model-meta">${r.train_time}s</div>
+            `;
+            grid.appendChild(card);
+        });
+
+        // comparison chart
+        const labels = results.filter(r => !r.error).map(r => r.name);
+        const scores = results.filter(r => !r.error).map(r => taskType === 'classification' ? r.accuracy : r.r2_score);
+        const cvScores = results.filter(r => !r.error).map(r => r.cv_score);
+        const colors = labels.map(l => l === best ? '#8b5cf6' : '#3f3f46');
+
+        if (compChart) compChart.destroy();
+        compChart = new Chart(document.getElementById('comparisonChart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: taskType === 'classification' ? 'Accuracy' : 'R2 Score', data: scores, backgroundColor: colors, borderRadius: 6 },
+                    { label: 'CV Score', data: cvScores, backgroundColor: 'rgba(59,130,246,0.5)', borderRadius: 6 }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#71717a', font: { size: 11 } } } },
+                scales: {
+                    x: { ticks: { color: '#71717a', font: { size: 10 } }, grid: { color: '#1a1a1e' } },
+                    y: { ticks: { color: '#71717a' }, grid: { color: '#1a1a1e' }, beginAtZero: true }
+                }
+            }
+        });
+
+        // feature importance
+        if (data.training.feature_importance && data.training.feature_importance.length > 0) {
+            document.getElementById('featureContainer').style.display = 'block';
+            const feats = data.training.feature_importance;
+
+            if (featChart) featChart.destroy();
+            featChart = new Chart(document.getElementById('featureChart'), {
+                type: 'bar',
+                data: {
+                    labels: feats.map(f => f.feature),
+                    datasets: [{
+                        label: 'Importance',
+                        data: feats.map(f => f.importance),
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#71717a' }, grid: { color: '#1a1a1e' } },
+                        y: { ticks: { color: '#d4d4d8', font: { size: 10 } }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // ai explanation
+        if (data.explanation && data.explanation.explanation) {
+            document.getElementById('explanationBox').style.display = 'block';
+            document.getElementById('explanationText').textContent = data.explanation.explanation;
+        }
+
+        document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function loadHistory() {
+        try {
+            const res = await fetch(API + '/history');
+            const data = await res.json();
+            const list = document.getElementById('historyList');
+
+            if (!data.history || data.history.length === 0) {
+                list.innerHTML = '<div class="empty-msg">no training runs yet.</div>';
+                return;
+            }
+
+            list.innerHTML = '';
+            data.history.forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="history-top">
+                        <span class="history-name">${esc(h.filename || '')} → ${esc(h.target_column || '')}</span>
+                        <span class="history-score">${h.accuracy || 0}%</span>
+                    </div>
+                    <div class="history-meta">
+                        ${esc(h.best_model || '')} | ${esc(h.task_type || '')} | ${h.total_rows || 0} rows | ${h.total_features || 0} features | ${h.created_at || ''}
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        } catch(e) {}
+    }
+
+    loadHistory();
+</script>
+</body>
+</html>
